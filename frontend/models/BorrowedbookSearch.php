@@ -43,11 +43,12 @@ class BorrowedBookSearch extends BorrowedBook
     public function search($params)
     {
 
-        //  // if (Yii::$app->user->can('student')){
-        //  //  $student_id = Student::find()->where(['userId'=>Yii::$app->user->id])->One();
-        //  //  $query = BorrowedBook::find()->where(['return_date'=>NULL])->andWhere(['studentId'=>$student_id->studentsId]);
+        if (Yii::$app->user->can('student')){
+        $student_id = Student::find()->where(['userId'=>Yii::$app->user->id])->One();
+        // var_dump($student_id);exit();
+        $query = BorrowedBook::find()->where(['actualreturnDate'=>NULL])->andWhere(['studentId'=>$student_id->studentsId]);
 
-        // }
+        }
         if (Yii::$app->user->can('Librarian')){
         $query = BorrowedBook::find()->where(['actualreturnDate'=>NULL]);
       }

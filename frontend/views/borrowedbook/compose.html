@@ -1,0 +1,8 @@
+<?php 
+
+use frontend\models\Notifications;              
+
+                    $notifications = Notifications::find()->where(['userId'=>Yii::$app->user->id])->all();
+                    var_dump($notifications)
+
+                ?>

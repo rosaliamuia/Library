@@ -15,7 +15,7 @@ $books = ArrayHelper::map(Book::find()->where(['status'=>2])->all(), 'bookId', '
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'bookName')->dropDownList($books) ?>
+        <?= $form->field($model, 'bookId')->dropDownList($books) ?>
        
     
         <div class="form-group">

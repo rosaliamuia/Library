@@ -23,8 +23,11 @@ $students = ArrayHelper::map(Student::find()->all(), 'studentsId', 'fullName');?
             'method'=>'post',
         ]); ?>
         <?= $form->field($model, 'studentId')->dropDownList($students) ?>
+
         <?= $form->field($model, 'bookId')->dropDownList($books) ?>
+
         <?= $form->field($model, 'borrowDate')->hiddenInput(['value'=>date('yy/m/d')])->label(false) ?>
+
          <?= $form->field($model, 'expectedreturnDate')->widget(
     DatePicker::className(), [
         // inline too, not bad

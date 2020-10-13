@@ -18,11 +18,13 @@ $this->title = 'BorrowedBooks';
 $this->params['breadcrumbs'][] = $this->title;
 
 $totalBooks = Book::find()->asArray()->all();
-$bb = BorrowedBook::find()->asArray()->all();
+$bb = BorrowedBook::find()->asArray()->where(['actualreturnDate'=>Null])->all();
 $totalStudents = Student::find()->asArray()->all();
 $overdue = BorrowedBook::find()->where('expectedreturnDate >'.date('yy/m/d'))->andWhere([
-  'actualreturnDate'=>NULL])->asArray()->all();
+  'actualreturnDate'=>Null])->asArray()->all();
+
 ?>
+
 
 <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -238,7 +240,9 @@ $overdue = BorrowedBook::find()->where('expectedreturnDate >'.date('yy/m/d'))->a
 
                 <?php } ?> 
 
-   <?php if(Yii::$app->user->can('Librarian')){?>           
+   <?php if(Yii::$app->user->can('Librarian')){?>
+   <div class="row table-responsive no-padding">
+                <div class="col-sm-12">            
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
@@ -295,26 +299,44 @@ $overdue = BorrowedBook::find()->where('expectedreturnDate >'.date('yy/m/d'))->a
                             'value' => function ($dataProvider) {
                                 $bookStatus = Book::find()->where(['bookId'=>$dataProvider->bookId])->One();
                                 if($bookStatus->status == 0){
+                                    $button = 'btn btn-info';
                                     $status = 'Available';
                                 }elseif ($bookStatus->status == 1){
+                                    $button = 'btn btn-success';
                                     $status = 'Issued';
                                 }elseif ($bookStatus->status == 2){
+                                    $button = 'btn btn-warning';
                                     $status = 'Pending';
                                 }
-                                return '<span class="btn btn-info">'.$status.'</span>';
+                                return '<span class="'.$button.'">'.$status.'</span>';
                             },
                             
                         ],
-              
-            
+                        [
+                            'label'=>'Approve Book',
+                            'format' => 'raw',
+                            'value' => function ($dataProvider) {
+                            $bookStatus = Book::find()->where(['bookId'=>$dataProvider->bookId])->One();
+                            if( $bookStatus->status == 2){
+                                return Html::a('Approve', ['approvebook','id'=>$dataProvider->bookId,'studentId'=>$dataProvider->studentId], ['class' => 'btn btn-success']);
+                            }
+                            return '';
+                            },
+                            
+                         ],
+                            
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
+              
+            
                 ]); ?>
 
                 <?php } ?>  
 
 
-                <?php if(Yii::$app->user->can('student')){?>           
+                <?php if(Yii::$app->user->can('student')){?>
+                <div class="row table-responsive no-padding">
+                <div class="col-sm-12">            
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
@@ -353,22 +375,22 @@ $overdue = BorrowedBook::find()->where('expectedreturnDate >'.date('yy/m/d'))->a
                        
 
                         [
-                            'label'=>'Status',
-                            'format' => 'raw',
-                            'value' => function ($dataProvider) {
-                                $bookStatus = Book::find()->where(['bookId'=>$dataProvider->bookId])->One();
-                                if($bookStatus->status == 0){
-                                    $status = 'Available';
-                                      return '<span class="btn btn-info">'.$status.'</span>';
-                                }elseif ($bookStatus->status == 1){
-                                    $status = 'Issued';  return '<span class="btn btn-success">'.$status.'</span>';
-                                }elseif ($bookStatus->status == 2){
-                                    $status = 'Pending';
-                                }
-                                return '<span class="btn btn-info">'.$status.'</span>';
+                   'label'=>'Book Status',
+                   'format' => 'raw',
+                   'value' => function ($dataProvider) {
+                     $status = Book::find()->where(['bookId'=>$dataProvider->bookId])->one();
+                     if($status->status == 0){
+                       $status = 'Available';
+                        return '<span class="btn btn-info">'.$status.'</span>';
+                     }elseif ($status->status == 1) {
+                       $status = 'Issued';
+                        return '<span class="btn btn-success">'.$status.'</span>';
+                     }elseif ($status->status == 2) 
+                     {$status='Pending'; return '<span val="'.$dataProvider->bookId.'"class="btn btn-danger approvebook">'.$status.'</span>';
+                   }
+                   return '<span class="btn btn-info ">'.$status.'</span>';
                             },
-                            
-                        ],
+               ],
               
             
                         ['class' => 'yii\grid\ActionColumn'],
@@ -432,6 +454,16 @@ $overdue = BorrowedBook::find()->where('expectedreturnDate >'.date('yy/m/d'))->a
             ]);        
 
         echo "<div id='assignbookContent'></div>";
+        Modal::end();
+      ?>
+
+      <?php
+        Modal::begin([
+            'id'=>'approvebook',
+            'size'=>'modal-md'
+            ]);        
+
+        echo "<div id='approvebookContent'></div>";
         Modal::end();
       ?>
 

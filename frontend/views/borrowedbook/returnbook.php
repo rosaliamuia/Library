@@ -22,7 +22,9 @@ $books = ArrayHelper::map(Book::find()->where(['status'=>0])->all(), 'bookId', '
 
 	<?php $form = ActiveForm::begin(['id' => 'borrowedbook-create']); ?>
     
-        <?= $form->field($model, 'studentId')->dropDownList($students,['disabled' => true]) ?>    <?= $form->field($model, 'bookId')->dropDownList($books,['disabled' => true]) ?>
+        <?= $form->field($model, 'studentId')->dropDownList($students,['disabled' => true]) ?>
+            
+        <?= $form->field($model, 'bookId')->dropDownList($books,['disabled' => true]) ?>
     
     <?= $form->field($model, 'borrowDate')->textInput(['disabled' => true]) ?>
 

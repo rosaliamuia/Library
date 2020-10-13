@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\BookAuthor;
 use frontend\models\BorrowedBook;
+use frontend\models\Notifications;
 
 /**
  * BookController implements the CRUD actions for Book model.
@@ -127,13 +128,14 @@ class BookController extends Controller
     }
 
     
-    public function actionApprovebook()
-{
-    $model = new \frontend\models\Book();
+    public function actionApprovebook($id)
+{  
+$model = new Book();
 
-    if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        
-            // form inputs are valid, do something here
+    if (Yii::$app->request->post()) {
+           $command = \Yii::$app->db->createCommand('UPDATE book SET status=1 WHERE bookId='.$id);
+            $command->execute();
+            // $this->createNotifications($studentId,$id);
             return $this->redirect(['index']);
         
     }
@@ -142,6 +144,19 @@ class BookController extends Controller
         'model' => $model,
     ]);
 }
+
+
+        public function createNotifications($studentId,$bookId){
+        $book = Book::find()->where(['bookId'=>$bookId])->one();
+        $icon= 'fa fa-book';
+        $userId = Student::find()->where(['studentsId'=>$studentId])->one();
+        \Yii::$app->db->createCommand()->insert('notifications', [
+            'icon' => $icon,
+            'userId' => $userId->userId,
+            'message'=> 'Your request for book '.$book->bookName.' has been approved.'
+        ])->execute();
+        return true;
+    }
 
 
 

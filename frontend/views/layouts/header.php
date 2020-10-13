@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use frontend\models\Notifications;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -33,67 +34,67 @@ use yii\helpers\Html;
                                 <li><!-- start message -->
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="/img/work-2.jpg" class="img-circle"
+                                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
                                                  alt="User Image"/>
                                         </div>
                                         <h4>
                                             Support Team
                                             <small><i class="fa fa-clock-o"></i> 5 mins</small>
                                         </h4>
-                                        <p>Why not check out a new book?</p>
+                                        <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li>
                                 <!-- end message -->
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/work-6.jpg" class="img-circle"
+                                            <img src="<?= $directoryAsset ?>/img/user3-128x128.jpg" class="img-circle"
                                                  alt="user image"/>
                                         </div>
                                         <h4>
-                                            University Library System
+                                            AdminLTE Design Team
                                             <small><i class="fa fa-clock-o"></i> 2 hours</small>
                                         </h4>
-                                        <p>Continue checking out historical books?</p>
+                                        <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/work-6.jpg" class="img-circle"
+                                            <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="img-circle"
                                                  alt="user image"/>
                                         </div>
                                         <h4>
                                             Developers
                                             <small><i class="fa fa-clock-o"></i> Today</small>
                                         </h4>
-                                        <p>Why not read the Bible?</p>
+                                        <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/work-6.jpg" class="img-circle"
+                                            <img src="<?= $directoryAsset ?>/img/user3-128x128.jpg" class="img-circle"
                                                  alt="user image"/>
                                         </div>
                                         <h4>
-                                            Admin Department
+                                            Sales Department
                                             <small><i class="fa fa-clock-o"></i> Yesterday</small>
                                         </h4>
-                                        <p>Three new books in demand this semester</p>
+                                        <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#">
                                         <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/work.2.jpg" class="img-circle"
+                                            <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="img-circle"
                                                  alt="user image"/>
                                         </div>
                                         <h4>
                                             Reviewers
                                             <small><i class="fa fa-clock-o"></i> 2 days</small>
                                         </h4>
-                                        <p>Top borowed books this semester and reviews of each</p>
+                                        <p>Why not buy a new awesome theme?</p>
                                     </a>
                                 </li>
                             </ul>
@@ -101,48 +102,32 @@ use yii\helpers\Html;
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
                 </li>
+                <?php 
+                    $notifications = Notifications::find()->where(['userId'=>Yii::$app->user->id])->all();
+                ?>
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">10</span>
+                        <span class="label label-warning"><?= count($notifications)?></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">You have <?= count($notifications)?> notifications</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
+                            <?php foreach ($notifications as $notification) { ?>
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                        <i class="<?= $notification->icon ?>"></i> <?=$notification->message?>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning text-yellow"></i> Very long description here that may
-                                        not fit into the page and may cause design problems
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-users text-red"></i> 5 new members joined
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-user text-red"></i> You changed your username
-                                    </a>
-                                </li>
+                           <?php }?>
                             </ul>
-                        </li>
-                        <li class="footer"><a href="#">View all</a></li>
+                        <li class="footer"><a href="#"><a href="compose.html" class="btn btn-success btn-block margin-bottom">View All</a></a></li>
+                        <li class="footer"><a href="#"><a href="write.html" class="btn btn-success btn-block margin-bottom">Compose</a></a></li>
                     </ul>
                 </li>
+
                 <!-- Tasks: style can be found in dropdown.less -->
                 <li class="dropdown tasks-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -157,7 +142,7 @@ use yii\helpers\Html;
                                 <li><!-- Task item -->
                                     <a href="#">
                                         <h3>
-                                           Read some books
+                                            Design some buttons
                                             <small class="pull-right">20%</small>
                                         </h3>
                                         <div class="progress xs">
@@ -173,7 +158,7 @@ use yii\helpers\Html;
                                 <li><!-- Task item -->
                                     <a href="#">
                                         <h3>
-                                            Learn how to read more effectively
+                                            Create a nice theme
                                             <small class="pull-right">40%</small>
                                         </h3>
                                         <div class="progress xs">
@@ -205,7 +190,7 @@ use yii\helpers\Html;
                                 <li><!-- Task item -->
                                     <a href="#">
                                         <h3>
-                                            Make beautiful transitions in reading using audio books
+                                            Make beautiful transitions
                                             <small class="pull-right">80%</small>
                                         </h3>
                                         <div class="progress xs">
@@ -229,19 +214,18 @@ use yii\helpers\Html;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/avatar.png"  class="user-image" alt="User Image"/>
+                        <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?=Yii::$app->user->identity->username?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/avatar.png"  class="img-circle"
+                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
                                  alt="User Image"/>
 
-
                             <p>
-                                <?=Yii::$app->user->identity->username?> -
-                                <small>Member</small>
+                                Alexander Pierce - Web Developer
+                                <small>Member since Nov. 2012</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
@@ -250,7 +234,7 @@ use yii\helpers\Html;
                                 <a href="#">Followers</a>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <a href="#">Books read</a>
+                                <a href="#">Sales</a>
                             </div>
                             <div class="col-xs-4 text-center">
                                 <a href="#">Friends</a>

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\modal;
 use frontend\models\Book;
+use fontend\models\BorrowedBook;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\BookSearch */
@@ -41,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <!-- /.box-header -->
 
-            <?php if(Yii::$app->user->can('admin')){?>
+            <?php if(Yii::$app->user->can('Librarian')){?>
              
             <div class="box-body">
                 <?= GridView::widget([
@@ -76,41 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]); ?>
             </div>
              <?php }?>
-             <?php if(Yii::$app->user->can('Librarian')){?>
-             
-            <div class="box-body">
-                <?= GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-            
-                        'bookId',
-                        'bookName',
-                        'referenceNo',
-                        'publisher',
-                         [
-                   'label'=>'Book Status',
-                   'format' => 'raw',
-                   'value' => function ($dataProvider) {
-                     $status = Book::find()->where(['bookId'=>$dataProvider->bookId])->one();
-                     if($status->status == 0){
-                       $status = 'Available';
-                        return '<span class="btn btn-info">'.$status.'</span>';
-                     }elseif ($status->status == 1) {
-                       $status = 'Issued';
-                        return '<span class="btn btn-success">'.$status.'</span>';
-                     }elseif ($status->status == 2) 
-                     {$status='Pending'; return '<span val="'.$dataProvider->bookId.'"class="btn btn-danger approvebook">'.$status.'</span>';
-                   }
-                   return '<span class="btn btn-info ">'.$status.'</span>';
-                            },
-               ],
-                        ['class' => 'yii\grid\ActionColumn'],
-                    ],
-                ]); ?>
-            </div>
-             <?php }?>
+
+             <!--  -->
 
 
       <?php if(Yii::$app->user->can('student')){?>
